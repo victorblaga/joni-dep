@@ -1,0 +1,54 @@
+plugins {
+    id "com.jfrog.bintray" version "1.7.3"
+}
+
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+
+group = 'joni.dep'
+version = '0.1.0.BETA'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    pkg {
+        repo = 'joni-dep'
+        name = 'joni-dep'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/victorblaga/joni-dep.git'
+        publications = ['Bintray']
+        version {
+            name = project.version
+        }
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    api 'com.typesafe:config:1.3.1'
+    implementation 'com.google.guava:guava:23.0'
+    implementation 'org.reflections:reflections:0.9.11'
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.hamcrest:hamcrest-all:1.3'
+    testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+
+
+}
+
+publishing {
+    publications {
+        Bintray(MavenPublication) {
+            from components.java
+            groupId project.group
+            artifactId 'joni-dep'
+            version project.version
+        }
+    }
+}
