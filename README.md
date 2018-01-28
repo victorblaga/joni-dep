@@ -209,4 +209,4 @@ COMING SOON...
 
 #### That's it
 There are more details, but start using it and you'll figure it out.
-Don't forget to check out the tests and the [example project (TODO)](TBD).
+Don't forget to check out the tests and the [example project](https://github.com/victorblaga/joni-dep-example).
