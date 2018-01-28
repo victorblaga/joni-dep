@@ -11,7 +11,7 @@ But can he do any better?
 
 ### Philosophy
 Joni Dep doesn't believe in autowiring.
-He thinks it is evil for many reasons:
+He thinks it is a bad practice for many reasons:
 
  - It's too much magic, and Joni Dep has a hard time debugging his code when something goes wrong.
  - Joni Dep likes to have the freedom of changing his mind, but standard frameworks strongly guide him into sprinkling specific annotations all over his business-layer code, thereby locking him into a particular vendor. Once the annotations are there, it's impossible to change the dependency injection framework without touching the entire codebase.
@@ -101,8 +101,8 @@ public class Application {
 
 Rules for writing a container:
 
-- Extend from `CustomContainer`
-- Add a public method with no parameters that knows how to create a component
+- Extend from `CustomContainer`.
+- For each component that you want to create, add a public method with no parameters that knows how to create it.
 - Optionally annotate this method with a `@Qualifier("name")`;
 by default, if you leave out the annotation, the component is qualified as "primary".
 - If the component you are creating has dependencies managed by another container,
@@ -148,7 +148,7 @@ public class SecondaryContainer extends CustomContainer {
 ### More about configuration
 
 Joni Dep uses the [Typesafe Config](https://lightbend.github.io/config/) library in the background.
-It contains a `ConfigParser` that adds a few conventions:
+Joni Dep also adds a `ConfigParser` that introduces a few conventions:
 
 - You can manually add an a configuration entry by calling the `entry` method:
 
@@ -209,4 +209,4 @@ COMING SOON...
 
 #### That's it
 There are more details, but start using it and you'll figure it out.
-Don't forget to check out the tests and the [example project (TODO)](TBD)
+Don't forget to check out the tests and the [example project (TODO)](TBD).
