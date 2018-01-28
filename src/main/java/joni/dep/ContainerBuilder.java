@@ -9,17 +9,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ContainerScanner {
+public class ContainerBuilder {
     private final Config config;
     private final List<String> packageNames;
-    private final Logger log = LoggerFactory.getLogger(ContainerScanner.class);
+    private final Logger log = LoggerFactory.getLogger(ContainerBuilder.class);
 
-    public ContainerScanner(Config config, String... packageNames) {
+    public ContainerBuilder(Config config, String... packageNames) {
         this.config = config;
         this.packageNames = Arrays.asList(packageNames);
     }
 
-    public Container scan() {
+    public Container build() {
         Collection<CustomContainer> customContainers = getAllContainers(this.packageNames);
         return new ContainerCollection(customContainers);
     }

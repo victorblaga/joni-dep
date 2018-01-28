@@ -5,11 +5,11 @@ import com.typesafe.config.ConfigFactory;
 import joni.dep.components.FirstComponent;
 import org.junit.Test;
 
-public class ContainerScannerTest {
+public class ContainerBuilderTest {
     @Test
     public void test() throws Exception {
         Config config = ConfigFactory.load();
-        Container container = new ContainerScanner(config, "joni.dep.containers").scan();
+        Container container = new ContainerBuilder(config, "joni.dep.containers").build();
         FirstComponent firstComponent = container.get(FirstComponent.class);
     }
 }
