@@ -49,7 +49,7 @@ public class ContainerCollection implements Container {
         } else {
             Blueprint blueprint = containerIndex.getBlueprint(klass, qualifier);
             if (blueprint == null) {
-                String message = String.format("Cannot find instance for class %s and qualifier %s",
+                String message = String.format("Cannot find instance for [%s:%s]",
                         klass.getCanonicalName(), qualifier);
                 throw new ContainerException(message);
             } else {
