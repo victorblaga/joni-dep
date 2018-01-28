@@ -1,4 +1,4 @@
-package joni.dep.containers;
+package joni.dep.components.containers;
 
 import com.typesafe.config.Config;
 import joni.dep.CustomContainer;

@@ -36,4 +36,8 @@ class Dependency {
                 ", qualifier='" + qualifier + '\'' +
                 '}';
     }
+
+    public String description() {
+        return String.format("%s:%s", klass.getCanonicalName(), qualifier);
+    }
 }

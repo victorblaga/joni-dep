@@ -1,9 +1,11 @@
 package joni.dep;
 
+import com.google.common.base.Joiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ContainerCollection implements Container {
     private final Collection<CustomContainer> customContainers;
@@ -29,7 +31,11 @@ public class ContainerCollection implements Container {
     @SuppressWarnings("unchecked")
     public <T> T get(Class<T> klass, String qualifier) {
         callChain.clear();
-        return doGet(klass, qualifier);
+        try {
+            return doGet(klass, qualifier);
+        } catch (ContainerException e) {
+            throw underlyingException(e);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -62,8 +68,23 @@ public class ContainerCollection implements Container {
     }
 
     ContainerException circularDependencyException(Class klass, String qualifier) {
-        String message = String.format("Circular dependency on %s:%s",
-                klass.getCanonicalName(), qualifier);
+        List<String> callChainDescriptions = callChain.stream().map(Dependency::description).collect(Collectors.toList());
+        String dependencyChain = Joiner.on(",").join(callChainDescriptions);
+        String message = String.format("Circular dependency [%s:%s]. Previous dependencies: [%s]",
+                klass.getCanonicalName(), qualifier, dependencyChain);
         return new ContainerException(message);
+    }
+
+    private ContainerException underlyingException(ContainerException e) {
+        Throwable result = e;
+        while (result.getCause() != null) {
+            result = result.getCause();
+        }
+
+        if (result instanceof ContainerException) {
+            return (ContainerException) result;
+        } else {
+            throw new RuntimeException(result);
+        }
     }
 }

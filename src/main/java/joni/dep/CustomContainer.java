@@ -8,7 +8,7 @@ public abstract class CustomContainer implements Container {
     protected final Config config;
     private ContainerCollection containerCollection;
 
-    protected CustomContainer(Config config) {
+    public CustomContainer(Config config) {
         this.config = config;
     }
 
