@@ -3,6 +3,7 @@ plugins {
 }
 
 apply plugin: 'java-library'
+apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = 'joni.dep'
@@ -51,4 +52,23 @@ publishing {
             version project.version
         }
     }
+}
+
+task createPom << {
+    pom {
+        project {
+            groupId project.group
+            artifactId 'joni-dep'
+            version project.version
+
+            inceptionYear '2018'
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+        }
+    }.writeTo("pom.xml")
 }
