@@ -17,7 +17,7 @@ He thinks it is a bad practice for many reasons:
  - It's too much magic, and Joni Dep has a hard time debugging and understanding his code when something goes wrong.
  - Joni Dep likes the freedom of changing his mind, but the frameworks force him to use specific annotations in his business-layer code, locking him into a particular vendor. Once the annotations are there, it's impossible to change the DI framework without touching the entire codebase.
  - Joni Dep thinks that classes with DI annotations go against the logic of the dependency injection pattern. The whole point of the pattern is that classes should not care how they are created, but the annotations do just that: they describe a creation pattern.
- - Joni Dep is a strong believer in the separation of concerns principle, which applies to object creation as well. He prefers things that do the same thing to be in the same place, rather than spread around all over the project.
+ - Joni Dep is a strong believer in the separation of concerns principle, which applies to object creation as well. He prefers things that have the same functionality to be in the same place, rather than spread around all over the project.
  - Business objects shouldn't depend on non-business code. Period. Dependency injection is a non-business detail that should plug into your business layer, and not the other way around.
 
 ### How to use
