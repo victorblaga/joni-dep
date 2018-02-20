@@ -147,7 +147,7 @@ public class SecondaryContainer extends CustomContainer {
 ### More about configuration
 
 Joni Dep uses the [Typesafe Config](https://lightbend.github.io/config/) library.
-Joni Dep also adds a `ConfigParser` that adds a few conventions:
+Joni Dep also defines a `ConfigParser` that adds a few conventions:
 
 - You can manually add a configuration entry by calling the `entry` method:
 
@@ -190,7 +190,7 @@ Config config = new ConfigParser().parse(args);
 #### Gradle
 Add the following to `gradle.build`:
 
-```groovy
+```gradle
 repositories {
     mavenCentral()
     jcenter()
@@ -202,7 +202,7 @@ dependencies {
 ```
 
 #### Maven
-```pom
+```xml
 <repositories>
     <repository>
         <snapshots>
