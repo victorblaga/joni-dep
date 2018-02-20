@@ -1,23 +1,24 @@
 # joni-dep
-**Joni Dep** is a simple dependency injection framework for Java.
+**Joni Dep** is a simple Java dependency injection framework.
 
 ### Motivation
-Joni Dep is really frustrated with Java dependency injections frameworks.
-He thinks they are too bloated and difficult to use, because they offer too much unnecessary functionality.
-Especially difficult are debugging and understanding what goes on in the background.
-_"I hate automagic"_ and _"it could be much simpler"_, Joni Dep often thinks while he tries to `@Autowire` his `@Component`s.
+Joni Dep is really frustrated with Java DI frameworks.
+They are too bloated and difficult to use, because they have too much unnecessary functionality.
+It's difficult to debug and understand what goes on in the background.
+_"Automagic is bad"_ and _"it could be much simpler"_, 
+Joni Dep thinks while he `@Autowire`s his `@Component`s.
 
-But can he do any better?
+Can he do any better?
 
 ### Philosophy
 Joni Dep doesn't believe in autowiring.
 He thinks it is a bad practice for many reasons:
 
- - It's too much magic, and Joni Dep has a hard time debugging his code when something goes wrong.
- - Joni Dep likes to have the freedom of changing his mind, but standard frameworks strongly guide him into sprinkling specific annotations all over his business-layer code, thereby locking him into a particular vendor. Once the annotations are there, it's impossible to change the dependency injection framework without touching the entire codebase.
- - Joni Dep thinks that annotating classes for DI reasons defeats the logic of the dependency injection pattern. The whole point of DI is that classes should not care how they are created, but the annotations do just that: they describe a creation pattern.
- - Joni Dep is a strong believer in the Separation of Concerns principle, and he strongly thinks that it applies to object creation as well. He prefers to have things in one place, rather than spread around all over his project.
- - Other reasons that he can't think of right now...
+ - It's too much magic, and Joni Dep has a hard time debugging and understanding his code when something goes wrong.
+ - Joni Dep likes the freedom of changing his mind, but the frameworks force him to use specific annotations in his business-layer code, locking him into a particular vendor. Once the annotations are there, it's impossible to change the DI framework without touching the entire codebase.
+ - Joni Dep thinks that classes with DI annotations go against the logic of the dependency injection pattern. The whole point of the pattern is that classes should not care how they are created, but the annotations do just that: they describe a creation pattern.
+ - Joni Dep is a strong believer in the separation of concerns principle, which applies to object creation as well. He prefers things that do the same thing to be in the same place, rather than spread around all over the project.
+ - Business objects shouldn't depend on non-business code. Period. Dependency injection is a non-business detail that should plug into your business layer, and not the other way around.
 
 ### How to use
 Given the following buinsess components:
@@ -43,7 +44,7 @@ public class ThirdServiceImpl implements ThirdService {
 }
 ```
 
-In a separate package, add some custom containers that know how to create the business components:
+In a separate package, add some custom containers that handle their creations:
 
 ```java
 package org.containers;
@@ -84,7 +85,7 @@ public class SecondContainer extends CustomContainer {
 }
 ```
 
-Now, in your main class, tell Joni Dep the name of the package where the containers are located and let him do the work for you:
+Tell Joni Dep the name of the package where the containers are located and let him do the work for you:
 
 ```java
 public class Application {
@@ -99,15 +100,13 @@ public class Application {
 
 ### How to write a container
 
-Rules for writing a container:
-
 - Extend from `CustomContainer`.
 - For each component that you want to create, add a public method with no parameters that knows how to create it.
 - Optionally annotate this method with a `@Qualifier("name")`;
-by default, if you leave out the annotation, the component is qualified as "primary".
-- If the component you are creating has dependencies managed by another container,
+by default, the component is qualified as "primary".
+- If the component you are creating has dependencies created by another container,
 call the `get(Dependency.class, "qualifier")` method. 
-If you leave out the qualifier string, by default it will be `"primary"`.
+If you leave out the qualifier, by default it will be `"primary"`.
 - If you need to inject values, retrieve them from the `config` protected field.
 
 ```java
@@ -147,10 +146,10 @@ public class SecondaryContainer extends CustomContainer {
 
 ### More about configuration
 
-Joni Dep uses the [Typesafe Config](https://lightbend.github.io/config/) library in the background.
-Joni Dep also adds a `ConfigParser` that introduces a few conventions:
+Joni Dep uses the [Typesafe Config](https://lightbend.github.io/config/) library.
+Joni Dep also adds a `ConfigParser` that adds a few conventions:
 
-- You can manually add an a configuration entry by calling the `entry` method:
+- You can manually add a configuration entry by calling the `entry` method:
 
 ```java
 Config config = new ConfigParser().entry("key", "value").parse();
@@ -176,7 +175,7 @@ System.out.println(config.getInt("args.key4"));
 
 - By default, as per the conventions of typesafe config, the `ConfigParser` looks for a `application.conf` and/or `reference.conf`
 on the classpath.
-- However, this behaviour can be overriden by supplying a `--resources` and/or `--files`.
+- However, this behaviour can be overriden by supplying a `--resources` and/or `--files` arg.
 The `resources` should point to a list of resource configuration names. 
 The `files` should point to a list of configuration filesystem paths.
 The order is `resources` first and `files` last.
@@ -186,7 +185,7 @@ String[] args = "--resources=resource1.conf,resource2.conf --files /path/to/file
 Config config = new ConfigParser().parse(args);
 ```
 
-### Use joni-dep in your project
+### How to use joni-dep in your project
 
 #### Gradle
 Add the following to `gradle.build`:
@@ -194,19 +193,38 @@ Add the following to `gradle.build`:
 ```groovy
 repositories {
     mavenCentral()
-    maven {
-        url  "https://dl.bintray.com/vicblaga/joni-dep"
-    }
+    jcenter()
 }
 
 dependencies {
-	compile 'joni.dep:joni-dep:0.1.0.BETA'
+    compile 'joni.dep:joni-dep:0.1.0.BETA'
 }
 ```
 
 #### Maven
-COMING SOON...
+```pom
+<repositories>
+    <repository>
+        <snapshots>
+	    <enabled>false</enabled>
+        </snapshots>
+        <id>central</id>
+        <name>bintray</name>
+        <url>https://jcenter.bintray.com</url>
+    </repository>
+</repositories>
+
+...
+
+<dependencies>
+    <dependency>
+        <groupId>joni.dep</groupId>
+        <artifactId>joni-dep</artifactId>
+        <version>0.1.0.BETA</version>
+        <type>pom</type>
+    </dependency>
+</dependencies>
+```
 
 #### That's it
-There are more details, but start using it and you'll figure it out.
 Don't forget to check out the tests and the [example project](https://github.com/victorblaga/joni-dep-example).
